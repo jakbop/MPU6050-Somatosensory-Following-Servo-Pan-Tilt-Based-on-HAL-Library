@@ -6,8 +6,7 @@
 
 
 // 通用角度 → 脉宽转换函数
-static uint16_t angle_to_pulse(float angle, float min_angle, float max_angle,
-                               uint16_t min_pulse, uint16_t max_pulse) {
+static uint16_t angle_to_pulse(float angle, float min_angle, float max_angle,uint16_t min_pulse, uint16_t max_pulse) {
     if (angle < min_angle) angle = min_angle;
     if (angle > max_angle) angle = max_angle;
     return min_pulse + (uint16_t)((angle - min_angle) * (max_pulse - min_pulse) / (max_angle - min_angle));

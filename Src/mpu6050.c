@@ -82,6 +82,7 @@ void MPU6050_Get_Angles(float *roll, float *pitch, float *yaw) {
     float accel_roll  = atan2f(ay, az) * 180.0f / M_PI;
 
     // 陀螺仪转换（±2000°/s -> 除以 16.4 得到 °/s）
+	  //真实角速度（°/s）= 原始数字 ÷ 16.4----具体看使用手册
     float gyro_pitch = gy / 16.4f;
     float gyro_roll  = gx / 16.4f;
     float gyro_yaw   = gz / 16.4f;
@@ -95,9 +96,16 @@ void MPU6050_Get_Angles(float *roll, float *pitch, float *yaw) {
     last_time = now;
 
     // 互补滤波系数
+	  //系数 alpha
+    //alpha = 0.96：陀螺仪占 96%
+    //1 - alpha = 0.04：加速度计占 4%
+		//最终角度 = 陀螺仪预测角度 × 0.96 + 加速度计矫正角度 × 0.04
+		//陀螺仪角度 = 上一次角度 + 角速度 × 时间
     float alpha = 0.96f;
     roll_angle  = alpha * (roll_angle  + gyro_roll  * dt) + (1 - alpha) * accel_roll;
     pitch_angle = alpha * (pitch_angle + gyro_pitch * dt) + (1 - alpha) * accel_pitch;
+		
+		//加速度计 测不出偏航角 yaw所以不需要互补滤波
     yaw_angle  += gyro_yaw * dt;   // 无磁力计修正，会漂移，但对于体感跟随短期可用
 
     *roll  = roll_angle;
