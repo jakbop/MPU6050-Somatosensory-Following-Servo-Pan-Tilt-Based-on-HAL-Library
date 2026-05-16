@@ -159,8 +159,7 @@ int main(void)
 		Servo_Yaw_SetAngle(yaw_angle);
 
 		// 控制周期 50Hz
-		HAL_Delay(20);
-		
+		HAL_Delay(20);	
 		
   }
   /* USER CODE END 3 */
